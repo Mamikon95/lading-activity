@@ -7,6 +7,7 @@ abstract class ActivityService
 {
     const METHOD_ADD = 'add';
     const METHOD_GET = 'get';
+    const METHOD_COUNT = 'count';
 
     /**
      * @var ApiService
@@ -26,12 +27,22 @@ abstract class ActivityService
 
     /**
      * Get activity data list
-     * @param int $page
+     * @param null $limit
+     * @param int $offset
      * @return bool
      */
-    public static function getData(int $page = 1)
+    public static function getData($limit = null, int $offset = 0)
     {
-        return self::getService()->send(['url' => $page], self::METHOD_GET);
+        return self::getService()->send(['limit' => $limit, 'offset' => $offset], self::METHOD_GET);
+    }
+
+    /**
+     * Get all count
+     * @return bool
+     */
+    public static function getCount()
+    {
+        return self::getService()->send([], self::METHOD_COUNT);
     }
 
     /**

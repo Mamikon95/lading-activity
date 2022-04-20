@@ -1,6 +1,8 @@
 <?php
+
 namespace app\controllers\api\v1;
 
+use app\components\Auth;
 use yii;
 use app\models\User;
 use JsonRpc2\Controller;
@@ -15,27 +17,12 @@ class BaseController extends Controller
             'verbs' => [
                 'class' => yii\filters\VerbFilter::class,
                 'actions' => [
-                    '*'  => ['POST'],
+                    '*' => ['POST'],
                 ],
             ],
+            'authenticator' => [
+                'class' => Auth::class
+            ]
         ];
-    }
-
-    /**
-     * @return bool
-     * @throws \JsonRpc2\extensions\AuthException
-     */
-    public function checkAuth()
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $user = User::findIdentityByAccessToken($this->getAuthCredentials());
-
-        if (!$user)
-        {
-            throw new \JsonRpc2\extensions\AuthException('Missing auth',
-                \JsonRpc2\extensions\AuthException::MISSING_AUTH);
-        }
-
-        return true;
     }
 }

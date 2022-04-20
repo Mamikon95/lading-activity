@@ -9,6 +9,8 @@ use app\services\ActivityService;
 
 class BaseController extends Controller
 {
+    protected $enableActivity = true;
+
     /**
      * {@inheritdoc}
      */
@@ -23,7 +25,11 @@ class BaseController extends Controller
 
     public function beforeAction($action)
     {
-        ActivityService::newActivity(preg_replace('/:[0-9]+/', '.local', Url::canonical()), yii::$app->formatter->asDate(time(), 'php:d.m.Y'));
+        if($this->enableActivity)
+        {
+            ActivityService::newActivity(preg_replace('/:[0-9]+/', '.local', Url::canonical()), yii::$app->formatter->asDate(time(), 'php:d.m.Y'));
+        }
+
         return parent::beforeAction($action);
     }
 }
